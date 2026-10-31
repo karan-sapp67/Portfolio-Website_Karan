@@ -1,0 +1,58 @@
+/* ── The only music UI: one slanted SOUND button (bottom-left), a now-playing tab, a progress line ── */
+.sound { position: fixed; left: var(--s2); bottom: var(--s2); z-index: 705; display: flex; align-items: flex-end; }
+.sound-btn {
+  position: relative; min-height: 44px; min-width: 44px; padding: 0 var(--s2);
+  display: inline-flex; align-items: center; background: var(--black); color: var(--white); border: 3px solid var(--white);
+  transform: skewX(var(--skew)); box-shadow: 4px 4px 0 var(--red);
+  font-family: var(--font-display); font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase;
+  transition: background 150ms, transform 200ms var(--ease-snap), box-shadow 200ms var(--ease-snap);
+}
+.sound-btn > span { display: inline-flex; align-items: center; gap: var(--s1); transform: skewX(var(--unskew)); }
+.sound-btn:hover, .sound-btn:focus-visible { transform: skewX(var(--skew)) translate(-2px, -2px); box-shadow: 6px 6px 0 var(--red); }
+.sound-btn:focus-visible { outline: 3px solid var(--white); outline-offset: 3px; }
+.sound-btn:active { transform: skewX(var(--skew)) translate(2px, 2px); box-shadow: 1px 1px 0 var(--red); }
+.sound.is-on .sound-btn { background: var(--red-deep); box-shadow: 4px 4px 0 var(--black); }
+.sound.is-on .sound-btn:hover, .sound.is-on .sound-btn:focus-visible { box-shadow: 6px 6px 0 var(--black); }
+
+/* now-playing tab: slides out of the button while the song plays */
+.sound-tab {
+  position: relative; margin-left: var(--s1); align-self: stretch; max-width: min(320px, calc(100vw - var(--rail-w) - 220px)); min-width: 0;
+  background: var(--black); color: var(--white); border: 3px solid var(--white); box-shadow: 4px 4px 0 var(--red);
+  transform: skewX(var(--skew)) translateX(-16px); opacity: 0; visibility: hidden; pointer-events: none;
+  transition: transform 200ms var(--ease-snap), opacity 200ms var(--ease-snap), visibility 0s 200ms;
+}
+.sound.is-on .sound-tab { transform: skewX(var(--skew)); opacity: 1; visibility: visible; transition-delay: 0s; }
+.sound-tab-in { display: grid; align-content: center; gap: 2px; padding: 4px var(--s2); min-height: 100%; transform: skewX(var(--unskew)); }
+.sound-line { overflow: hidden; white-space: nowrap; }
+.sound-line > span { display: inline-block; }
+.sound-line--title { font-family: var(--font-display); font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; }
+.sound-line--sub { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+/* a line wider than the tab drifts slowly to its end and back */
+.sound-line.is-scroll > span { animation: sound-scroll 9s linear infinite alternate; }
+@keyframes sound-scroll { 0%, 12% { transform: translateX(0); } 88%, 100% { transform: translateX(calc(var(--ov) * -1)); } }
+
+/* playback position: read-only 2px red line under the button */
+.sound-progress { position: absolute; left: 0; bottom: -8px; width: 100%; max-width: 160px; height: 2px; background: transparent; opacity: 0; transition: opacity 200ms var(--ease-snap); }
+.sound.is-on .sound-progress { opacity: 1; }
+.sound-progress i { display: block; height: 100%; background: var(--red); transform: scaleX(0); transform-origin: 0 50%; }
+
+.eq { display: inline-flex; align-items: flex-end; gap: 2px; width: 14px; height: 14px; }
+.eq i { flex: 1; height: 35%; background: currentColor; }
+.eq.is-on i { animation: eq 700ms var(--ease-in-out) infinite alternate; }
+.eq.is-on i:nth-child(2) { animation-delay: -250ms; }
+.eq.is-on i:nth-child(3) { animation-delay: -500ms; }
+@keyframes eq { to { height: 100%; } }
+
+/* phones: the tab shows only the title line and stays clear of the HUD and content */
+@media (max-width: 899px) {
+  .sound-tab { max-width: calc(100vw - 190px); }
+  .sound-line--sub { display: none; }
+  .sound-tab-in { padding: 4px var(--s1); }
+  .sound-line--title { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .eq.is-on i { animation: none; height: 70%; }
+  .sound-line.is-scroll > span { animation: none; }
+  .sound-line.is-scroll { overflow-x: auto; scrollbar-width: none; }
+  .sound-tab { transition: opacity 0.01ms, visibility 0s; }
+}

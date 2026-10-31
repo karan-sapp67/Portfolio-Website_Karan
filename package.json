@@ -1,0 +1,26 @@
+{
+  "name": "karan-portfolio",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c red,white \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client",
+    "seed": "npm run seed -w server",
+    "lint": "npm run lint -w client",
+    "format": "prettier --write \"client/src/**/*.{js,jsx,css}\" \"server/src/**/*.js\"",
+    "photo": "node scripts/photo.mjs",
+    "photo:cutout": "node scripts/photo.mjs --cutout",
+    "icons": "node scripts/icons.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6",
+    "png-to-ico": "^3.0.2",
+    "prettier": "^3.9.10",
+    "puppeteer-core": "^25.16.0",
+    "sharp": "^0.35.5"
+  },
+  "type": "module"
+}

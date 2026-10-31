@@ -1,0 +1,167 @@
+/* ── THE HEIST intro ──
+   z-index 650 keeps the whole scene (and the portrait) above the grain overlay (600) while
+   the HUD (700+), rail, menu, wipe and cursor stay above it. */
+.heist { position: relative; z-index: 650; height: 100vh; height: 100svh; overflow: hidden; background: var(--black); }
+.cam { position: absolute; inset: 0; will-change: transform; }
+
+/* moon: red disc with halftone shading on one side */
+.moon {
+  position: absolute; right: 14%; top: 9%; width: min(44vh, 38vw); aspect-ratio: 1; border-radius: 50%; background: var(--red); overflow: hidden;
+}
+.moon::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, var(--black) 2.4px, transparent 2.7px); background-size: 11px 11px;
+  -webkit-mask-image: linear-gradient(125deg, transparent 38%, #000 82%); mask-image: linear-gradient(125deg, transparent 38%, #000 82%);
+}
+
+/* skyline */
+.skyline { position: absolute; inset: 0; transform-origin: 50% 100%; }
+.sky-layer { position: absolute; left: -6%; bottom: 0; width: 112%; max-width: none; } /* override the svg reset */
+.sky-far { height: 78vh; } .sky-far .bld { fill: var(--red-deep); }
+.sky-mid { height: 66vh; } .sky-mid .bld { fill: var(--ink); }
+.sky-near { height: 54vh; } .sky-near .bld { fill: var(--black); stroke: var(--white); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.sky-roof { height: 24vh; } .sky-roof .bld { fill: var(--black); stroke: var(--white); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.win { fill: var(--red); }
+.win--flick { animation: flick 3.2s steps(1) infinite; }
+@keyframes flick { 0%, 100% { opacity: 1; } 42% { opacity: 0.1; } 46% { opacity: 1; } 71% { opacity: 0.2; } 73% { opacity: 1; } }
+.ant line, .ant path { stroke: var(--white); stroke-width: 2.5; vector-effect: non-scaling-stroke; fill: none; }
+.ant-light { fill: var(--red); }
+
+/* drifting diagonal speed lines */
+.speedlines-diag { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.speed { position: absolute; top: calc(8% + var(--i) * 12%); left: calc(-30% + var(--i) * 15%); width: 34vw; height: 3px; background: var(--white); opacity: 0.35; transform: rotate(-18deg); }
+.speed:nth-child(odd) { height: 2px; opacity: 0.2; }
+
+/* final hero layout */
+.heist-hero {
+  position: absolute; inset: 0; z-index: 3; margin: 0 auto; max-width: var(--max);
+  display: grid; grid-template-columns: minmax(0, 6fr) auto minmax(0, 5fr); align-items: center; gap: var(--s4);
+  padding: var(--s7) calc(var(--gutter) + var(--rail-w) + var(--s3)) var(--s5) var(--gutter);
+}
+.hero-copy { display: grid; gap: var(--s3); align-content: center; }
+.hero-name { display: grid; gap: var(--s1); font-weight: 400; margin: 0; }
+.hn-word { display: flex; flex-wrap: nowrap; gap: 4px; }
+.hn-l, .slam-l {
+  display: inline-block; padding: 0.05em 0.1em 0; font-family: var(--font-display); line-height: 1; text-transform: uppercase;
+  transform: rotate(var(--r, 0deg)); box-shadow: 4px 4px 0 var(--red);
+}
+.hn-l { font-size: clamp(40px, min(6.6vw, 12vh), 96px); }
+.hn-bw { background: var(--black); color: var(--white); outline: 3px solid var(--white); outline-offset: -3px; }
+.hn-wb { background: var(--white); color: var(--black); }
+.hn-red { background: var(--red); color: var(--white); box-shadow: 4px 4px 0 var(--black); outline: 0; }
+.tagline { overflow: hidden; }
+.tagline-inner {
+  display: inline-block; padding: var(--s1) var(--s2); background: var(--white); color: var(--black);
+  font-family: var(--font-display); font-size: 26px; line-height: 1.1; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+  box-shadow: 6px 6px 0 var(--red);
+}
+
+/* clip tiles (original abstract art, game names as plain text) */
+.h-tiles { display: flex; gap: var(--s4); margin-top: var(--s2); }
+.h-tile { width: 176px; }
+.h-tiles .px:nth-child(1) .h-tile { rotate: -3deg; }
+.h-tiles .px:nth-child(2) .h-tile { rotate: 2.5deg; }
+.h-tile-art { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--ink); border: 3px solid var(--white); box-shadow: 6px 6px 0 var(--red); }
+.h-tile-art span { position: absolute; }
+.h-tile-art .a { inset: -20% 45% -20% -10%; background: var(--red); transform: skewX(-20deg); }
+.h-tile-art .b { inset: 62% -10% 16% 30%; background: var(--white); transform: skewY(-12deg); }
+.h-tile-art .play { left: 50%; top: 50%; width: 24px; height: 28px; margin: -14px 0 0 -10px; background: var(--white); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.h-tile-meta { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+.h-tile-game { align-self: flex-start; padding: 2px var(--s1); background: var(--white); color: var(--black); font-family: var(--font-display); font-size: 16px; letter-spacing: 0.08em; transform: skewX(var(--skew)); }
+.h-tile-title { font-size: var(--fs-label); letter-spacing: 0.18em; text-transform: uppercase; }
+
+/* portrait column: the portrait and the calling card share one box */
+.portrait-col { position: relative; display: grid; place-items: center; }
+.portrait-box { position: relative; z-index: 1; height: clamp(380px, 72vh, 760px); aspect-ratio: 4 / 5; max-width: 100%; }
+.heist-portrait, .card-fly { position: absolute; inset: 0; }
+.heist-portrait .portrait--hero { height: 100%; width: 100%; }
+.portrait-px { width: 100%; height: 100%; will-change: transform; }
+.card-slot { position: absolute; top: 50%; left: 50%; width: 112%; aspect-ratio: 7 / 5; translate: -50% -50%; container-type: inline-size; } /* landscape card, wider than the portrait box */
+.card-assembly, .card-ghost, .shard { position: absolute; inset: 0; }
+.card-assembly { background: var(--black); outline: 3px solid var(--white); outline-offset: -3px; filter: drop-shadow(12px 12px 0 var(--black)); } /* backing hides hairline seams between shards */
+.card-ghost { background: var(--red); opacity: var(--o); }
+.shard { background: var(--black); will-change: transform; visibility: hidden; }
+.card-whole { position: absolute; inset: 0; }
+.tear-line { position: absolute; left: -10%; top: 50%; width: 125%; height: 6px; margin-top: -3px; background: var(--black); transform: rotate(-54deg) scaleX(0); transform-origin: 0 50%; }
+.shock { position: absolute; left: 50%; top: 50%; width: 70%; aspect-ratio: 1; translate: -50% -50%; border: 8px solid var(--red); border-radius: 50%; visibility: hidden; }
+/* steady translucent shockwave ring circling the card (as in the approved reference) */
+.card-ring { position: absolute; left: 50%; top: 50%; width: 118%; aspect-ratio: 1; translate: -50% -50%; visibility: hidden; pointer-events: none; }
+.card-ring::before { content: ''; position: absolute; inset: 0; border: 40px solid var(--red); border-radius: 50%; opacity: 0.35; }
+
+/* giant hero line: vertical, in its own grid column between the name and the portrait (never overlaps) */
+.heart-line {
+  position: relative; z-index: 0; justify-self: center;
+  margin-right: calc(min(28.8vh, 304px) * 0.2 - var(--s4) + 8px); /* clear the slab's left overhang */
+  writing-mode: vertical-rl; transform: rotate(180deg) skewY(var(--unskew));
+  font-family: var(--font-display); font-size: clamp(56px, 9vh, 80px); line-height: 1; text-transform: uppercase; white-space: nowrap;
+  color: transparent; -webkit-text-stroke: 2px var(--white); visibility: hidden;
+}
+
+/* beat-1 decor: red halftone panel (top right) and the whisper line */
+.halftone-panel {
+  position: absolute; top: 0; right: 0; width: 38vw; height: 46vh; pointer-events: none;
+  background-image: radial-gradient(circle, var(--red) 2.2px, transparent 2.5px); background-size: 12px 12px; opacity: 0.55;
+  -webkit-mask-image: linear-gradient(225deg, #000 10%, transparent 70%); mask-image: linear-gradient(225deg, #000 10%, transparent 70%);
+}
+.whisper { position: absolute; z-index: 6; left: var(--gutter); bottom: var(--s7); color: var(--muted); font-family: var(--font-display); font-size: 16px; letter-spacing: 0.3em; text-transform: uppercase; transform: skewX(var(--skew)); }
+.thou-line { color: var(--white); font-size: 16px; font-weight: 600; letter-spacing: 0.32em; text-transform: uppercase; visibility: hidden; }
+
+/* beat 2 slam + stamp */
+.slam-wrap { position: absolute; inset: 0; z-index: 4; display: grid; place-content: center; justify-items: center; gap: var(--s3); pointer-events: none; }
+.slam { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s1) var(--s3); padding: var(--s3) var(--s5); background: var(--red); box-shadow: 10px 10px 0 var(--black); clip-path: polygon(0 12%, 100% 0, 98% 88%, 2% 100%); visibility: hidden; max-width: 92vw; }
+.slam-w { display: flex; gap: 3px; }
+.slam-l { font-size: clamp(36px, 6vw, 96px); box-shadow: 3px 3px 0 var(--black); }
+.stamp-start {
+  padding: var(--s1) var(--s3); border: 6px solid var(--white); color: var(--white); background: var(--black);
+  font-family: var(--font-display); font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.12em; text-transform: uppercase; visibility: hidden;
+}
+
+/* stickers: margins only */
+.h-stickers { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.h-sticker { width: 56px; visibility: hidden; }
+.hs-a { left: var(--s3); top: var(--s7); }
+.hs-b { right: calc(var(--rail-w) + var(--s3)); top: var(--s7); }
+.hs-c { display: none; }
+
+/* overlays */
+.infiltrate { position: absolute; left: 50%; bottom: var(--s6); z-index: 6; translate: -50% 0; display: flex; align-items: center; gap: var(--s2); }
+.ring { width: 40px; height: 40px; rotate: -90deg; }
+.ring circle { fill: none; stroke-width: 3; }
+.ring-bg { stroke: var(--muted); }
+.ring-fill { stroke: var(--red); stroke-dasharray: 113; stroke-dashoffset: 113; }
+.infiltrate-tag { padding: var(--s1) var(--s2); background: var(--white); color: var(--black); font-family: var(--font-display); font-size: 20px; letter-spacing: 0.12em; text-transform: uppercase; transform: skewX(var(--skew)); box-shadow: 5px 5px 0 var(--red); animation: tag-blink 1.2s steps(2, jump-none) infinite; }
+.infiltrate-tag span { display: inline-block; transform: skewX(var(--unskew)); }
+@keyframes tag-blink { 50% { opacity: 0.35; } }
+.flash, .negative { position: absolute; inset: 0; pointer-events: none; visibility: hidden; }
+.flash { z-index: 7; background: var(--white); }
+.negative { z-index: 8; background: var(--white); mix-blend-mode: difference; }
+.release { position: absolute; top: -20%; bottom: -20%; left: -30%; right: -30%; z-index: 9; background: var(--red); pointer-events: none; } /* GSAP owns its transform */
+.skip-intro { position: absolute; z-index: 10; right: calc(var(--rail-w) + var(--gutter)); bottom: var(--s4); font-size: 14px; padding: 8px var(--s2); }
+
+/* hidden until the timeline reveals them */
+.heist:not(.heist--static) :is(.hn-l, .h-tile, .h-sticker, .card-fly, .heist-portrait, .release, .card-ring) { visibility: hidden; }
+.heist--static .heart-line { visibility: visible; }
+
+/* mobile / low power */
+@media (max-width: 1199px) { .heart-line { display: none; } }
+@media (max-width: 899px) {
+  .heist-hero { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: center; gap: var(--s4); padding: var(--s7) var(--gutter) var(--s5); }
+  .portrait-col { order: -1; } /* portrait above the name on mobile */
+  .portrait-box { height: auto; width: 60vw; }
+  .h-tiles, .h-stickers, .heart-line { display: none; }
+  .card-slot { width: 100%; }
+  .hn-l { font-size: clamp(36px, 12vw, 72px); }
+  .tagline-inner { font-size: 20px; white-space: normal; }
+  .moon { right: 8%; top: 12%; width: 46vw; }
+  /* both sit above the fixed SOUND button row (44px + margins) so the now-playing tab never covers them */
+  .skip-intro { right: var(--gutter); bottom: calc(var(--s2) * 2 + 44px); }
+  .infiltrate { left: var(--gutter); translate: 0 0; bottom: calc(var(--s2) * 2 + 44px + 88px); } /* clear of the whisper line and SKIP INTRO */
+}
+
+/* reduced motion: static hero, no pin, no shake or flash */
+.heist--static { height: auto; min-height: 100vh; overflow: visible; }
+.heist--static .heist-hero { position: relative; inset: auto; min-height: 100vh; }
+.heist--static :is(.card-fly, .infiltrate, .slam-wrap, .release, .flash, .negative, .speedlines-diag) { display: none; }
+.heist--static :is(.skyline, .moon) { opacity: 0.32; }
+.card-static { width: min(320px, 90%); }
+@media (prefers-reduced-motion: reduce) { .win--flick, .infiltrate-tag { animation: none; } }

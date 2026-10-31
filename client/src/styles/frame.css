@@ -1,0 +1,35 @@
+/* ── ScreenFrame: shared menu-screen chrome ── */
+.sf { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.sf-tab {
+  position: absolute; top: var(--sf-top, 88px); left: var(--gutter); /* below the fixed HUD */ display: flex; align-items: stretch; height: 32px;
+  transform: skewX(var(--skew)); box-shadow: 4px 4px 0 var(--red);
+}
+.sf-tab > span { display: flex; align-items: center; padding: 0 12px; }
+.sf-num { background: var(--red-deep); color: var(--white); font-size: 16px; }
+.sf-name { background: var(--white); color: var(--black); font-family: var(--font-display); font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; }
+
+.sf-strip {
+  position: absolute; top: var(--s8); left: var(--s1); max-height: 50%; /* left margin: clear of the rail readout */
+  writing-mode: vertical-rl; transform: rotate(180deg); padding: var(--s2) 4px; border-left: 2px solid var(--red);
+  color: var(--muted); font-size: var(--fs-label); font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; white-space: nowrap; overflow: hidden;
+}
+.sf-hints { position: absolute; bottom: var(--s3); right: calc(var(--rail-w) + var(--gutter)); /* clear of the music pill */ display: flex; align-items: center; gap: var(--s1); color: var(--muted); font-size: var(--fs-label); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.sf-hints kbd { padding: 2px 8px; background: var(--ink); color: var(--white); border: 2px solid var(--muted); font: inherit; font-family: var(--font-display); letter-spacing: 0.06em; transform: skewX(var(--skew)); }
+
+.sf-shard { position: absolute; background: var(--white); opacity: 0.9; will-change: transform; }
+.sf-shard.is-red { background: var(--red); }
+.sf-s1 { top: 18%; right: 120px; width: 24px; height: 8px; rotate: -24deg; } /* right shards live inside the rail lane */
+.sf-s2 { top: 26%; right: 128px; width: 16px; height: 6px; rotate: 12deg; }
+.sf-s3 { bottom: 22%; left: 12px; width: 30px; height: 8px; rotate: 30deg; }
+.sf-s4 { bottom: 14%; left: 28px; width: 12px; height: 12px; rotate: 45deg; }
+.sf-s5 { top: 60%; right: 124px; width: 20px; height: 8px; rotate: -40deg; }
+
+/* on red sections the chrome inverts */
+.sf--red .sf-tab { box-shadow: 4px 4px 0 var(--black); }
+.sf--red .sf-num { background: var(--black); }
+.sf--red .sf-strip { color: var(--white); background: var(--black); border-color: var(--black); }
+.sf--red .sf-shard { background: var(--black); }
+.sf--red .sf-shard.is-red { background: var(--white); }
+
+@media (max-width: 1099px) { .sf-strip, .sf-shard { display: none; } }
+@media (max-width: 899px) { .sf-hints { display: none; } .sf-tab { top: var(--s4); } }

@@ -1,0 +1,64 @@
+/* ── Custom scroll rail (desktop) ── */
+.rail {
+  position: fixed; top: var(--s7); bottom: var(--s4); right: var(--s2); z-index: 710; width: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: var(--s1);
+  transition: opacity 400ms var(--ease-snap);
+}
+.rail.is-idle:not(:hover):not(:focus-within) { opacity: 0.4; }
+.rail-body { position: relative; flex: 1; width: 100%; }
+
+.rail-track { position: absolute; inset: 0 auto 0 50%; width: 12px; margin-left: -6px; cursor: pointer; }
+/* the slanted rail itself is a pseudo-element so it never clips the thumb or its readout */
+.rail-track::before {
+  content: ''; position: absolute; inset: 0; background: var(--black); border: 2px solid var(--white);
+  clip-path: polygon(0 0, 100% 6px, 100% 100%, 0 calc(100% - 6px)); pointer-events: none;
+}
+.rail-track:focus-visible { outline: none; box-shadow: none; }
+.rail-track:focus-visible::before { border-color: var(--red); background: var(--ink); }
+.rail-body:has(.rail-track:focus-visible) { outline: 3px solid var(--white); outline-offset: 6px; }
+
+/* slanted red shape is the ::before, so the % readout is not clipped */
+.rail-thumb {
+  position: absolute; left: -10px; right: -10px; top: 0; height: 56px; cursor: grab; touch-action: none;
+  filter: drop-shadow(4px 4px 0 var(--black)); will-change: transform;
+}
+.rail-thumb::before { content: ''; position: absolute; inset: 0; background: var(--red); clip-path: polygon(0 10px, 100% 0, 100% calc(100% - 10px), 0 100%); transition: background 150ms; }
+.rail-thumb:hover::before, .rail-thumb.is-drag::before { background: var(--white); }
+.rail-thumb.is-drag { cursor: grabbing; }
+.rail-pct {
+  position: absolute; right: calc(100% + var(--s1)); top: 50%; translate: 0 -50%; white-space: nowrap; pointer-events: none;
+  padding: 2px 6px; background: var(--black); color: var(--white); font-family: var(--font-num); font-size: 12px; line-height: 1.4;
+}
+
+.rail-ticks { position: absolute; inset: 0; pointer-events: none; }
+.rail-tick {
+  position: absolute; right: 0; width: 26px; height: 24px; margin-top: -12px; pointer-events: auto; /* 24px target (WCAG 2.5.8) */
+}
+.rail-tick::before { /* the visible tick */
+  content: ''; position: absolute; right: 0; top: 50%; width: 18px; height: 6px; margin-top: -3px;
+  background: var(--white); transform: skewY(var(--skew)); transition: background 150ms, width 200ms var(--ease-snap);
+}
+.rail-tick:hover::before { background: var(--red); }
+.rail-tick.is-active::before { background: var(--red); width: 26px; }
+.rail-tick:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; box-shadow: none; }
+.rail-tick-label {
+  position: absolute; right: calc(100% + var(--s1)); top: 50%; translate: 0 -50%; white-space: nowrap;
+  padding: 2px var(--s1); background: var(--red-deep); color: var(--white); font-family: var(--font-display); font-size: 14px; letter-spacing: 0.1em;
+  opacity: 0; transform: skewX(var(--skew)) translateX(8px); transition: opacity 150ms, transform 200ms var(--ease-snap); pointer-events: none;
+}
+.rail-tick:hover .rail-tick-label, .rail-tick:focus-visible .rail-tick-label { opacity: 1; transform: skewX(var(--skew)); }
+
+.rail-arrow {
+  width: 32px; height: 24px; flex: none; display: grid; place-items: center; background: var(--black); border: 2px solid var(--white);
+  transform: skewX(var(--skew)); transition: background 150ms, transform 150ms var(--ease-snap);
+}
+.rail-arrow svg { width: 10px; height: 8px; fill: var(--white); transform: skewX(var(--unskew)); }
+.rail-arrow:hover, .rail-arrow:focus-visible { background: var(--red); }
+.rail-arrow:active { transform: skewX(var(--skew)) scale(0.9); }
+
+/* mobile & touch tablets: rail off, 4px top bar + HUD % instead */
+@media (max-width: 899px), (pointer: coarse) and (max-width: 1199px) {
+  .rail { display: none; }
+  .top-progress { display: block; }
+  .hud-pct { display: block; }
+}

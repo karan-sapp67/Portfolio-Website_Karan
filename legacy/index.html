@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- TODO: update title, description and URLs once the real content is in -->
+    <title>Karan Sapalia — MERN Stack Developer &amp; UI Designer</title>
+    <meta name="description" content="Portfolio of Karan Sapalia, a MERN stack developer and UI designer. Projects, skills and journey." />
+    <meta name="theme-color" content="#050507" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Karan Sapalia — MERN Stack Developer &amp; UI Designer" />
+    <meta property="og:description" content="MERN stack developer and UI designer. Projects, skills and journey." />
+    <meta property="og:url" content="https://example.com/" /> <!-- TODO -->
+    <meta property="og:image" content="https://example.com/og.png" /> <!-- TODO: add a 1200x630 image -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="preloader" id="preloader" role="status" aria-live="polite">
+      <div class="pre-count"><span id="pre-num">0</span><small>%</small></div>
+      <div class="pre-bar"><i id="pre-bar"></i></div>
+    </div>
+
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+
+    <a class="skip" href="#about">Skip to content</a>
+    <header class="nav" id="nav"></header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-label="Introduction">
+        <div class="hero-track" id="hero-track">
+          <div class="hero-sticky">
+            <div id="bgArt" aria-hidden="true"></div>
+            <canvas id="hero-canvas" aria-hidden="true"></canvas>
+            <div id="collage" class="collage" aria-hidden="true"></div>
+            <p class="hero-hint" id="hero-hint">Scroll to begin</p>
+            <div class="hero-copy" id="hero-copy">
+              <h1 class="hero-name" id="hero-name"></h1>
+              <p class="hero-tag"><span id="hero-tag"></span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section" aria-labelledby="about-h"></section>
+      <section id="projects" class="section section--projects" aria-labelledby="projects-h"></section>
+      <section id="skills" class="section" aria-labelledby="skills-h"></section>
+      <section id="journey" class="section" aria-labelledby="journey-h"></section>
+      <section id="contact" class="section section--contact" aria-labelledby="contact-h"></section>
+    </main>
+    <footer class="footer" id="footer"></footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

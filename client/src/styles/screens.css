@@ -1,0 +1,6 @@
+/* ── Screen (section) shells ── */
+.screen { position: relative; min-height: 100vh; padding: var(--s8) calc(var(--gutter) + var(--rail-w)) var(--s7) var(--gutter); background: var(--black); }
+.screen:nth-of-type(odd) { background: var(--ink); }
+.screen-inner { max-width: var(--max); margin: 0 auto; }
+.screen h2:focus { outline: none; }
+@media (max-width: 899px) { .screen { padding: var(--s7) var(--gutter) var(--s6); } }

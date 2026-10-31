@@ -1,0 +1,39 @@
+/* ── Locked design tokens (v5). Flat, hard-edged, high contrast. ── */
+:root {
+  --red: #e60012;
+  --red-deep: #9e000c;
+  --black: #0a0a0a;
+  --ink: #141414;
+  --white: #f5f5f0;
+  --muted: #9a9a9a;
+  --yellow: #ffd400; /* stickers only */
+
+  /* portrait colour treatment: natural (default) | duotone */
+  --photo-mode: natural;
+
+  --ease-snap: cubic-bezier(0.2, 0.9, 0.1, 1);
+  --ease-in-out: cubic-bezier(0.7, 0, 0.2, 1);
+
+  /* spacing scale: 8 / 16 / 24 / 32 / 48 / 64 / 96 / 128 */
+  --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px; --s7: 96px; --s8: 128px;
+
+  --skew: -10deg;
+  --unskew: 10deg;
+  --shadow-solid: 6px 6px 0 var(--black);
+
+  /* type scale (max 3 sizes per screen) */
+  --fs-display: clamp(56px, 10vw, 160px);
+  --fs-h2: clamp(40px, 6vw, 88px);
+  --fs-h3: 28px;
+  --fs-body: 17px;
+  --fs-label: 12px;
+
+  --font-display: 'Anton', 'Impact', 'Arial Narrow Bold', sans-serif;
+  --font-num: 'Dela Gothic One', 'Anton', 'Impact', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --max: 1280px;
+  --gutter: clamp(24px, 4vw, 48px);
+  --rail-w: 104px; /* lane reserved for the scroll rail + its moving % readout (desktop) */
+}
+@media (min-width: 1280px) { :root { --fs-body: 18px; } }

@@ -1,0 +1,49 @@
+/* ── CallingCard: ring-style landscape postcard ── */
+.cc { position: relative; aspect-ratio: 7 / 5; rotate: var(--cc-tilt, -2deg); filter: drop-shadow(12px 12px 0 var(--black)); container-type: inline-size; }
+.cc-sheet { position: absolute; inset: 0; overflow: hidden; background: var(--black); outline: 3px solid var(--white); outline-offset: -3px; }
+.cc-face { position: absolute; inset: 0; overflow: hidden; container-type: inline-size; color: var(--white); }
+.cc-rings { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cc-spin { transform-origin: 350px 250px; transform-box: view-box; }
+.cc--spin .cc-spin, .card-fly .cc-spin { animation: cc-spin 40s linear infinite; }
+@keyframes cc-spin { to { transform: rotate(360deg); } }
+/* faint paper grain (noise at very low opacity, no blur) */
+.cc-grain {
+  position: absolute; inset: 0; opacity: 0.08; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+}
+.cc-label { position: absolute; left: 4cqw; top: 3.5cqw; font-size: max(11px, 1.6cqw); font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+
+/* emblem: centred, slightly above the middle, with original swooshes trailing left */
+.cc-emblem-wrap { position: absolute; left: 50%; top: 40%; width: 52%; translate: -50% -50%; }
+.cc-emblem { position: relative; width: 100%; height: auto; }
+.cc-swoosh { position: absolute; right: 88%; top: -8%; width: 30%; height: auto; }
+.cc-swoosh path { fill: var(--white); stroke: var(--black); stroke-width: 3; stroke-linejoin: round; }
+
+/* headline: white cut-out letters, thick black outline, solid black offset shadow */
+.cc-title { position: absolute; left: 0; right: 0; bottom: 19%; display: flex; justify-content: center; gap: 3cqw; }
+.cc-word { display: flex; }
+.cc-l {
+  display: inline-block; font-family: var(--font-display); font-size: 10.5cqw; line-height: 1; text-transform: uppercase;
+  color: var(--white); -webkit-text-stroke: 0.6cqw var(--black); paint-order: stroke fill;
+  text-shadow: 0.7cqw 0.7cqw 0 var(--black); transform: translateY(var(--y)) rotate(var(--r)) skewX(var(--skew));
+}
+.cc-sig { position: absolute; right: 4cqw; bottom: 3.5cqw; font-size: max(11px, 1.8cqw); font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); text-shadow: 2px 2px 0 var(--black); }
+
+@media (prefers-reduced-motion: reduce) { .cc--spin .cc-spin, .card-fly .cc-spin { animation: none; } }
+
+/* ── form variant: the contact form printed on the card (height follows the fields) ── */
+.cc--form { aspect-ratio: auto; filter: drop-shadow(12px 12px 0 var(--black)); }
+.cc--form .cc-sheet, .cc--form .cc-face { position: relative; inset: auto; }
+.card-form { position: relative; display: grid; gap: var(--s2); padding: var(--s5) var(--s5) var(--s7); }
+.calling-form-head {
+  justify-self: start; margin-bottom: var(--s1); font-family: var(--font-display); font-size: clamp(32px, 5cqw, 52px); line-height: 1; text-transform: uppercase;
+  color: var(--white); -webkit-text-stroke: 6px var(--black); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--black); transform: skewX(var(--skew));
+}
+/* every printed label/message sits on its own solid slab so it reads over the rings */
+.cc--form .field .label { justify-self: start; padding: 2px var(--s1); background: var(--black); color: var(--white); }
+.cc--form .field input, .cc--form .field textarea { box-shadow: 4px 4px 0 var(--black); }
+.cc--form .field-error, .cc--form .form-status { justify-self: start; min-height: 0; color: var(--white); }
+.cc--form .field-error:not(:empty), .cc--form .form-status:not(:empty) { padding: 2px var(--s1); background: var(--black); }
+.cc--form .field.has-error input, .cc--form .field.has-error textarea { border-color: var(--black); box-shadow: 4px 4px 0 var(--white); }
+.cc--form .stamp { z-index: 2; }
+@media (max-width: 599px) { .card-form { padding: var(--s4) var(--s3) var(--s7); } }
