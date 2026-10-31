@@ -18,7 +18,6 @@
 .stat-tile > * { transform: skewX(var(--unskew)); }
 .stat-tile dd { font-size: 48px; line-height: 1; }
 .stat-tile:nth-child(2) dt, .stat-tile:nth-child(3) dt { color: var(--muted); }
-.dialogue-name .portrait--avatar { margin: -12px 0 -12px -8px; }
 @media (max-width: 899px) { .about-grid { grid-template-columns: 1fr; gap: var(--s5); } .stat-tile dd { font-size: 40px; } }
 
 /* ── HIDEOUT ── */

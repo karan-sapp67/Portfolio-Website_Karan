@@ -195,7 +195,7 @@ export const clips = [
 ];
 
 // Newest first. Certificates and courses: paste yours (title, issuer, year, link) and they are added
-// as kind 'Certificate' / 'Course' entries. The group stays hidden until there is at least one.
+// as kind 'Certificate' / 'Course' entries. None yet, so nothing is shown for them.
 export const journey = [
   {
     order: 1,
@@ -256,9 +256,6 @@ export const journey = [
     bullets: ['Scored 70.20%.'],
     tags: [],
   },
-  // Dev-only placeholders so the layout is visible while you gather real ones; never shown in production.
-  { order: 90, date: 'TBA', kind: 'Certificate', role: 'Certificate title', org: 'Issuer', bullets: ['Placeholder: add a certificate you have earned.'], tags: ['TODO'] },
-  { order: 91, date: 'TBA', kind: 'Course', role: 'Course title', org: 'Platform', bullets: ['Placeholder: add a course you have completed.'], tags: ['TODO'] },
 ];
 
 // kind 'stat' = segmented bar; kind 'skill' = selectable list item. Groups follow the resume.
@@ -295,7 +292,15 @@ export const skills = [
 
 // Client-only content (not served by the API).
 export const about = {
-  intro: 'I am Karan, a data science student in Mumbai who builds full-stack web apps. Python, SQL and R by day; React, Next.js, Tailwind and Firebase by deadline. I have shipped four production apps in an internship, prototype fast with Firebase AI and Stitch, and care about data ethics and privacy.',
+  // One line per dialogue page; *word* is highlighted. Keep every line short.
+  dialogue: [
+    { text: 'I AM THOU, *THOU ART I.*', big: true },
+    { text: "Name's *Karan*. I study *Data Science* in Mumbai and build full-stack web apps." },
+    { text: 'Data is *Python*, *SQL* and *R*. Everything you can click is *React*, *Next.js*, *Tailwind* and *Firebase*.' },
+    { text: 'This year I interned at *Valencia Nutrition* and shipped *four* production apps: a task tracker, a sales dashboard, procurement and a clinical survey.' },
+    { text: 'I prototype fast with *Firebase AI* and *Stitch*, and I care about *data ethics* and *privacy*.' },
+    { text: 'Every project is a target. Pick yours. *THOU ART I.*' },
+  ],
   stats: [
     { label: 'Projects', value: '11' },
     { label: 'Hackathons', value: '02' },

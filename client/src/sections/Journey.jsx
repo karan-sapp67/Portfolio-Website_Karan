@@ -11,8 +11,8 @@ import { SectionHead } from '../components/ui.jsx';
 
 export default function Journey() {
   const { data } = useApi('/journey', fallback);
-  // placeholders (date TBA) only show in dev; a group with no real entries is hidden entirely
-  const entries = useMemo(() => data.filter((e) => import.meta.env.DEV || e.date !== 'TBA'), [data]);
+  // never show placeholder cards (date TBA), even if one sneaks in through the API
+  const entries = useMemo(() => data.filter((e) => e.date !== 'TBA'), [data]);
   const root = useRef(null);
 
   useLayoutEffect(() => {
