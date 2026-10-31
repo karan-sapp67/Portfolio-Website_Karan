@@ -58,11 +58,11 @@
 .dialogue-name .portrait--avatar { width: 52px; height: 52px; margin: -14px 0 -14px -6px; }
 .dialogue-box {
   position: relative; padding: var(--s6) var(--s4) var(--s5); background: var(--black); color: var(--white);
-  border: 3px solid var(--white); transform: skewX(-3deg); box-shadow: 8px 8px 0 var(--red); cursor: pointer;
+  min-height: 384px; border: 3px solid var(--white); transform: skewX(-3deg); box-shadow: 8px 8px 0 var(--red); cursor: pointer; /* same height on every page and with choices */
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
 }
-.dialogue-text { transform: skewX(3deg); font-size: clamp(18px, 1.5vw, 22px); line-height: 1.55; min-height: 6.4em; max-width: 56ch; }
-.dialogue-text.is-big { font-family: var(--font-display); font-size: clamp(34px, 4.2vw, 56px); line-height: 1.02; text-transform: uppercase; letter-spacing: 0.02em; min-height: 3.1em; }
+.dialogue-text { transform: skewX(3deg); font-size: clamp(18px, 1.5vw, 22px); line-height: 1.55; min-height: 4.8em; max-width: 56ch; }
+.dialogue-text.is-big { font-family: var(--font-display); font-size: clamp(34px, 4.2vw, 56px); line-height: 1.02; text-transform: uppercase; letter-spacing: 0.02em; min-height: 2.2em; }
 .dlg-hl { background: var(--red); color: var(--white); padding: 0 0.22em; font-weight: 700; text-shadow: 2px 2px 0 var(--black); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .dialogue-text .caret { display: inline-block; width: 0.5em; height: 1em; margin-left: 2px; vertical-align: -0.12em; background: var(--red); animation: blink 700ms steps(2) infinite; }
 .dialogue-next { position: absolute; right: var(--s5); bottom: var(--s2); width: 18px; height: 14px; background: var(--red); clip-path: polygon(0 0, 100% 0, 50% 100%); animation: bob 800ms var(--ease-in-out) infinite; }
@@ -72,9 +72,9 @@
 .dialogue-pips li { width: 16px; height: 6px; background: var(--ink); border: 2px solid var(--muted); transform: skewX(var(--skew)); }
 .dialogue-pips li.is-seen { background: var(--white); border-color: var(--white); }
 .dialogue-pips li.is-on { background: var(--red); border-color: var(--red); width: 26px; }
-.dialogue-choices { display: grid; gap: var(--s1); margin: var(--s3) 0 var(--s2); max-width: 340px; transform: skewX(3deg); }
+.dialogue-choices { display: grid; gap: 6px; margin: var(--s2) 0 var(--s3); max-width: 340px; transform: skewX(3deg); }
 .dlg-choice {
-  display: block; width: 100%; padding: 8px var(--s3); text-align: left; background: var(--black); color: var(--white); border: 2px solid var(--white);
+  display: block; width: 100%; padding: 6px var(--s3); text-align: left; background: var(--black); color: var(--white); border: 2px solid var(--white);
   font-family: var(--font-display); font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.1;
   transform: skewX(var(--skew)); box-shadow: 4px 4px 0 var(--red); transition: background 150ms, transform 150ms var(--ease-snap), box-shadow 150ms var(--ease-snap);
 }
@@ -86,7 +86,7 @@
 .dlg-choice--quiet { color: var(--muted); border-color: var(--muted); box-shadow: 4px 4px 0 var(--ink); }
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes bob { 50% { transform: translateY(5px); } }
-@media (max-width: 599px) { .dialogue-box { padding: var(--s6) var(--s3) var(--s5); } .dialogue-next { right: var(--s4); } }
+@media (max-width: 599px) { .dialogue-box { min-height: 0; padding: var(--s6) var(--s3) var(--s5); } .dialogue-next { right: var(--s4); } }
 @media (prefers-reduced-motion: reduce) { .dialogue-next, .dialogue-text .caret { animation: none; } }
 
 /* Stickers: thick white outline, solid offset shadow. Only small loops allowed. */
