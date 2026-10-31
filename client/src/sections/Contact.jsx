@@ -3,8 +3,8 @@
 // inline validation (same rules as the API) and a MESSAGE DELIVERED stamp, sticker buttons,
 // and the footer (torn edge, signature sticker, back-to-top badge).
 import { useState } from 'react';
-import { contact } from '@shared/seedData.js';
-import { api } from '../lib/api.js';
+import { contact } from '../data/index.js';
+import { api, apiEnabled } from '../lib/api.js';
 import { useScroll } from '../lib/scroll.jsx';
 import { useWipe } from '../components/Wipe.jsx';
 import StickerArt from '../components/StickerArt.jsx';
@@ -80,7 +80,7 @@ export default function Contact() {
       setTouched({});
     } catch (err) {
       if (err.data?.fields) setErrors(err.data.fields);
-      setServerMsg(err.data?.fields ? err.data.error : 'CALL FAILED. TRY AGAIN.');
+      setServerMsg(err.data?.fields ? err.data.error : 'Message could not be sent. Please use the email button below.');
       setState('error');
     }
   };
@@ -104,7 +104,7 @@ export default function Contact() {
           </h2>
 
           <div className="contact-grid">
-            <CallingCard as="form" className="cc--form" tilt={-1} onSubmit={submit} noValidate aria-describedby="cf-status" aria-labelledby="cf-head">
+            {apiEnabled ? <CallingCard as="form" className="cc--form" tilt={-1} onSubmit={submit} noValidate aria-describedby="cf-status" aria-labelledby="cf-head">
               <div className="card-form">
               <p className="calling-form-head" id="cf-head">Send a calling card</p>
               <Field id="cf-name" label="Name" error={touched.name && errors.name}>
@@ -135,7 +135,15 @@ export default function Contact() {
               </div>
               </div>
               {state === 'sent' && <div className="stamp" aria-hidden="true"><span>Message delivered</span></div>}
-            </CallingCard>
+            </CallingCard> : (
+              <CallingCard className="cc--form" tilt={-1}>
+                <div className="card-form">
+                  <p className="calling-form-head">Send a calling card</p>
+                  <p>The contact form is currently offline. Copy my email address or email me directly.</p>
+                  <SlantButton href={`mailto:${contact.email}`}>Write an email</SlantButton>
+                </div>
+              </CallingCard>
+            )}
 
             <div className="contact-side">
               <p className="contact-lede">Prefer something quicker? Pick a button.</p>
@@ -143,7 +151,7 @@ export default function Contact() {
                 <li>
                   <button type="button" className="sticker-btn" onClick={copy}>
                     <StickerArt type="bubble" className="sticker-btn-icon" />
-                    <span className="sticker-btn-label">{copied ? 'Copied!' : 'Email'}</span>
+                    <span className="sticker-btn-label">{copied ? 'Copied!' : 'Copy email'}</span>
                     <span className="sticker-btn-sub">{contact.email}</span>
                   </button>
                 </li>

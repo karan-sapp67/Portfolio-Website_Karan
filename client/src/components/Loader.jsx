@@ -12,14 +12,15 @@ export default function Loader({ ready, onDone }) {
   const [tip, setTip] = useState(0);
 
   const paint = () => {
+    if (!num.current?.firstChild || !bar.current) return;
     num.current.firstChild.nodeValue = String(Math.round(prog.current.v)).padStart(3, '0');
     bar.current.style.transform = `scaleX(${prog.current.v / 100})`;
   };
 
   useEffect(() => {
     const t = setInterval(() => setTip((i) => (i + 1) % TIPS.length), 600);
-    gsap.to(prog.current, { v: 85, duration: 0.9, ease: 'power2.out', onUpdate: paint });
-    return () => clearInterval(t);
+    const tween = gsap.to(prog.current, { v: 85, duration: 0.9, ease: 'power2.out', onUpdate: paint });
+    return () => { clearInterval(t); tween.kill(); };
   }, []);
 
   useEffect(() => {
@@ -27,10 +28,10 @@ export default function Loader({ ready, onDone }) {
     // safety net: animation frames pause in background tabs, so never let the loader block the page
     const fallback = setTimeout(onDone, 2000);
     gsap.killTweensOf(prog.current);
-    gsap.timeline({ onComplete: onDone })
+    const timeline = gsap.timeline({ onComplete: onDone })
       .to(prog.current, { v: 100, duration: 0.3, ease: 'power2.inOut', onUpdate: paint })
       .to(root.current, { clipPath: 'polygon(100% 0, 100% 0, 80% 100%, 80% 100%)', duration: 0.5, ease: 'power3.inOut', delay: 0.1 });
-    return () => clearTimeout(fallback);
+    return () => { clearTimeout(fallback); timeline.kill(); };
   }, [ready, onDone]);
 
   return (

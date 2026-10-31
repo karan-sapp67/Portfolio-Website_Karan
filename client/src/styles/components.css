@@ -201,3 +201,6 @@ html.cursor-on :is(input, textarea) { cursor: text !important; }
 /* ── motion catalogue hooks (values driven by lib/motion.js) ── */
 .slant-btn { translate: var(--mx, 0px) var(--my, 0px); }
 .sec-head, .marquee, .contact-h { transform: skewX(var(--vskew, 0deg)); transform-origin: 0 50%; }
+
+.section-offline { margin: 3rem auto; padding: 2rem; max-width: 60rem; background: var(--red); color: var(--white, #fff); transform: skewY(-2deg); border: 3px solid currentColor; }
+.section-offline p { font-weight: 900; letter-spacing: .12em; }

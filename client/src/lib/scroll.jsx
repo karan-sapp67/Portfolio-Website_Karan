@@ -31,7 +31,9 @@ export function ScrollProvider({ children }) {
     lenis,
     /** Jump or glide to a selector / element / pixel offset. */
     scrollTo(target, { immediate = false } = {}) {
-      if (lenis) lenis.scrollTo(target, { immediate, force: true, duration: 1.4 });
+      const element = typeof target === 'string' ? document.querySelector(target) : target;
+      if (typeof target !== 'number' && !element) return;
+      if (lenis) lenis.scrollTo(element, { immediate, force: true, duration: 1.4 });
       else {
         const el = typeof target === 'string' ? document.querySelector(target) : target;
         const top = typeof target === 'number' ? target : el?.getBoundingClientRect().top + scrollY;

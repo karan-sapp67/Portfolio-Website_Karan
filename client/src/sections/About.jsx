@@ -1,6 +1,6 @@
 // ABOUT: a Persona-style conversation (portrait avatar on the name plate, one short line at a time,
 // choices at the end) beside a strip of slanted stat tiles.
-import { about } from '@shared/seedData.js';
+import { about } from '../data/index.js';
 import { useScroll } from '../lib/scroll.jsx';
 import { useWipe } from '../components/Wipe.jsx';
 import DialogueBox from '../components/DialogueBox.jsx';

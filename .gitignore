@@ -3,3 +3,6 @@ dist
 .env
 *.log
 client/public/audio/bgm-extended.mp3
+
+artifacts/
+client/dist-qa/

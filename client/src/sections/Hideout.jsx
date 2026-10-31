@@ -4,7 +4,7 @@
 // "CLIP COMING SOON" placeholder. The order is shuffled on every visit; SHUFFLE re-deals it.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { clips as fallback } from '@shared/seedData.js';
+import { clips as fallback } from '../data/index.js';
 import { useApi } from '../lib/api.js';
 import { reducedMotion, useScroll } from '../lib/scroll.jsx';
 import Decor from '../components/Decor.jsx';
@@ -111,7 +111,8 @@ function Lightbox({ clip, onClose }) {
 }
 
 export default function Hideout() {
-  const { data: clips } = useApi('/clips', fallback);
+  const { data } = useApi('/clips', fallback);
+  const clips = Array.isArray(data) ? data : fallback;
   const [tab, setTab] = useState('ALL');
   const [open, setOpen] = useState(null);
   const [deal, setDeal] = useState(0); // bumped by SHUFFLE

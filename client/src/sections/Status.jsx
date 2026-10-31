@@ -2,7 +2,7 @@
 // red slanted highlight). Right: detail panel with a segmented bar, description and related
 // missions. Overall stats sit above as segmented bars.
 import { useMemo, useRef, useState } from 'react';
-import { skills as seedSkills, projects as seedProjects } from '@shared/seedData.js';
+import { skills as seedSkills, projects as seedProjects } from '../data/index.js';
 import { useApi } from '../lib/api.js';
 import { useScroll } from '../lib/scroll.jsx';
 import Decor from '../components/Decor.jsx';
@@ -27,8 +27,13 @@ function Segments({ level, label }) {
 }
 
 export default function Status() {
-  const { data } = useApi('/skills', fallback);
-  const { data: projects } = useApi('/projects', seedProjects);
+  const { data: response } = useApi('/skills', fallback);
+  const data = {
+    stats: Array.isArray(response?.stats) ? response.stats : fallback.stats,
+    items: Array.isArray(response?.items) ? response.items : fallback.items,
+  };
+  const { data: projectResponse } = useApi('/projects', seedProjects);
+  const projects = Array.isArray(projectResponse) ? projectResponse : seedProjects;
   const { scrollTo } = useScroll();
   const list = useRef(null);
 
@@ -95,7 +100,7 @@ export default function Status() {
                 <span className="num skill-rank">Rank {rank(skill.level)}</span>
               </div>
               <p className="skill-desc">{skill.detail}</p>
-              {skill.related?.length > 0 && (
+              {Array.isArray(skill.related) && skill.related.length > 0 && (
                 <div className="skill-related">
                   <p className="label">Used in</p>
                   <ul className="chips">

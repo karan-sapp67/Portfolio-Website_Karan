@@ -13,10 +13,13 @@
     "format": "prettier --write \"client/src/**/*.{js,jsx,css}\" \"server/src/**/*.js\"",
     "photo": "node scripts/photo.mjs",
     "photo:cutout": "node scripts/photo.mjs --cutout",
-    "icons": "node scripts/icons.mjs"
+    "icons": "node scripts/icons.mjs",
+    "test:api": "node scripts/recovery-api-test.mjs",
+    "test:recovery": "node scripts/recovery-qa.mjs"
   },
   "devDependencies": {
     "concurrently": "^10.0.6",
+    "playwright": "^1.64.1",
     "png-to-ico": "^3.0.2",
     "prettier": "^3.9.10",
     "puppeteer-core": "^25.16.0",

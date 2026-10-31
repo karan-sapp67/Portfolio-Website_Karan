@@ -1,7 +1,7 @@
 // JOURNEY: quest-log timeline. A red line draws itself with scroll; each entry stamps in once.
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import { gsap } from 'gsap';
-import { journey as fallback } from '@shared/seedData.js';
+import { journey as fallback } from '../data/index.js';
 import { useApi } from '../lib/api.js';
 import { reducedMotion } from '../lib/scroll.jsx';
 import Decor from '../components/Decor.jsx';
@@ -10,13 +10,14 @@ import ScreenFrame from '../components/ScreenFrame.jsx';
 import { SectionHead } from '../components/ui.jsx';
 
 export default function Journey() {
-  const { data } = useApi('/journey', fallback);
+  const { data: response } = useApi('/journey', fallback);
+  const data = Array.isArray(response) ? response : fallback;
   // never show placeholder cards (date TBA), even if one sneaks in through the API
   const entries = useMemo(() => data.filter((e) => e.date !== 'TBA'), [data]);
   const root = useRef(null);
 
   useLayoutEffect(() => {
-    if (reducedMotion()) return;
+    if (reducedMotion() || !root.current?.querySelector('.quest-log')) return;
     const ctx = gsap.context(() => {
       gsap.fromTo('.quest-line-fill', { scaleY: 0 }, {
         scaleY: 1, ease: 'none',
@@ -50,8 +51,8 @@ export default function Journey() {
                 </header>
                 <h3 className="quest-title">{e.role}</h3>
                 <p className="quest-org">{e.org}</p>
-                <ul className="quest-bullets">{e.bullets.map((b) => <li key={b}>{b}</li>)}</ul>
-                {e.tags?.length > 0 && (
+                <ul className="quest-bullets">{(Array.isArray(e.bullets) ? e.bullets : []).map((b) => <li key={b}>{b}</li>)}</ul>
+                {Array.isArray(e.tags) && e.tags.length > 0 && (
                   <ul className="chips" aria-label="Tags">{e.tags.map((t) => <li key={t} className="chip"><span>{t}</span></li>)}</ul>
                 )}
               </article>

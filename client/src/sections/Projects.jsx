@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { projects as fallback } from '@shared/seedData.js';
+import { projects as fallback } from '../data/index.js';
 import { useApi } from '../lib/api.js';
 import { useScroll, reducedMotion } from '../lib/scroll.jsx';
 import { useWipe } from '../components/Wipe.jsx';
@@ -50,7 +50,7 @@ function Details({ p, num, total, idPrefix }) {
       <p className="mission-sub label reveal">{p.subtitle}</p>
       <p className="mission-desc reveal">{p.description}</p>
       <ul className="chips reveal" aria-label="Tech stack">
-        {p.tech.slice(0, 6).map((t) => <li key={t} className="chip"><span>{t}</span></li>)}
+        {(Array.isArray(p.tech) ? p.tech : []).slice(0, 6).map((t) => <li key={t} className="chip"><span>{t}</span></li>)}
       </ul>
       <dl className="mission-table reveal">
         <div><dt className="label">Role</dt><dd>{p.role}</dd></div>
@@ -91,7 +91,7 @@ function MissionDialog({ p, num, total, onClose }) {
   useEffect(() => {
     lenis?.stop();
     const prev = document.activeElement;
-    box.current.querySelector('button')?.focus();
+    box.current?.querySelector('button')?.focus();
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     addEventListener('keydown', onKey);
     return () => { lenis?.start(); removeEventListener('keydown', onKey); prev?.focus(); };
@@ -107,7 +107,8 @@ function MissionDialog({ p, num, total, onClose }) {
 }
 
 export default function Projects() {
-  const { data: projects } = useApi('/projects', fallback);
+  const { data } = useApi('/projects', fallback);
+  const projects = Array.isArray(data) ? data : fallback;
   const root = useRef(null);
   const progress = useRef(null);
   const [filter, setFilter] = useState('ALL');
@@ -143,6 +144,7 @@ export default function Projects() {
   };
 
   useLayoutEffect(() => {
+    if (!root.current) return;
     const reduced = reducedMotion();
     let offTilt = () => {};
     const ctx = gsap.context(() => {
@@ -153,8 +155,9 @@ export default function Projects() {
         trigger: p, start: 'top 55%', end: 'bottom 55%',
         onToggle: (st) => st.isActive && setCurrent(i),
       }));
-      ScrollTrigger.create({
-        trigger: '.missions-stack', start: 'top 50%', end: 'bottom 50%',
+      const stack = root.current.querySelector('.missions-stack');
+      if (stack) ScrollTrigger.create({
+        trigger: stack, start: 'top 50%', end: 'bottom 50%',
         onToggle: (st) => progress.current?.classList.toggle('is-on', st.isActive),
       });
       if (reduced) return;
@@ -199,6 +202,7 @@ export default function Projects() {
           const sx = gsap.quickTo(shadow, 'x', { duration: 0.4, ease: 'power3' });
           const sy = gsap.quickTo(shadow, 'y', { duration: 0.4, ease: 'power3' });
           const move = (e) => {
+            if (!media?.isConnected) return;
             const r = media.getBoundingClientRect();
             const nx = (e.clientX - r.left) / r.width - 0.5;
             const ny = (e.clientY - r.top) / r.height - 0.5;

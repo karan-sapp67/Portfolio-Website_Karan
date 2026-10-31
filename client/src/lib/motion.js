@@ -34,7 +34,7 @@ function magnetic() {
     el = t;
   };
   const move = (e) => {
-    if (!el) return;
+    if (!el?.isConnected) return;
     const r = el.getBoundingClientRect();
     const nx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
     const ny = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
@@ -110,7 +110,9 @@ function headings() {
 }
 
 function stickers() {
-  ScrollTrigger.batch('.decor .sticker', {
+  const targets = gsap.utils.toArray('.decor .sticker');
+  if (!targets.length) return;
+  ScrollTrigger.batch(targets, {
     start: 'top 90%', once: false,
     onEnter: (batch) => gsap.fromTo(batch, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)', stagger: 0.12, overwrite: true }),
   });

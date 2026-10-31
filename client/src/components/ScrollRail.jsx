@@ -24,6 +24,7 @@ export default function ScrollRail({ sections, active, onSelect }) {
 
   // ── render loop + metrics ──
   useEffect(() => {
+    let disposed = false;
     let raf = 0;
     let idleT;
     const getY = () => (lenis ? lenis.scroll : scrollY);
@@ -31,6 +32,7 @@ export default function ScrollRail({ sections, active, onSelect }) {
 
     const render = () => {
       raf = 0;
+      if (disposed || !thumb.current || !readout.current || !track.current || !bar.current) return;
       const p = clamp01(getY() / maxScroll());
       progress.current = p;
       const { trackH, thumbH } = metrics.current;
@@ -45,6 +47,7 @@ export default function ScrollRail({ sections, active, onSelect }) {
     const request = () => { if (!raf) raf = requestAnimationFrame(render); };
 
     const wake = () => {
+      if (disposed || !rail.current) return;
       rail.current.classList.remove('is-idle');
       clearTimeout(idleT);
       idleT = setTimeout(() => rail.current?.classList.add('is-idle'), 2000);
@@ -52,6 +55,7 @@ export default function ScrollRail({ sections, active, onSelect }) {
     const onScroll = () => { request(); wake(); };
 
     const measure = () => {
+      if (disposed || !track.current || !thumb.current) return;
       const t = track.current.getBoundingClientRect();
       metrics.current = { trackH: t.height, thumbH: thumb.current.offsetHeight };
       const m = maxScroll();
@@ -73,6 +77,7 @@ export default function ScrollRail({ sections, active, onSelect }) {
     wake();
 
     return () => {
+      disposed = true;
       cancelAnimationFrame(raf);
       clearTimeout(idleT);
       if (lenis) lenis.off('scroll', onScroll);
@@ -95,7 +100,7 @@ export default function ScrollRail({ sections, active, onSelect }) {
     const startY = e.clientY;
     const startP = progress.current;
     const { trackH, thumbH } = metrics.current;
-    const move = (ev) => jumpTo(startP + (ev.clientY - startY) / (trackH - thumbH), false);
+    const move = (ev) => jumpTo(startP + (ev.clientY - startY) / Math.max(1, trackH - thumbH), false);
     const up = () => {
       el.classList.remove('is-drag');
       el.removeEventListener('pointermove', move);
@@ -109,10 +114,10 @@ export default function ScrollRail({ sections, active, onSelect }) {
 
   // ── click the rail to jump ──
   const onTrackDown = (e) => {
-    if (e.target !== track.current) return;
+    if (!track.current || e.target !== track.current) return;
     const r = track.current.getBoundingClientRect();
     const { trackH, thumbH } = metrics.current;
-    jumpTo((e.clientY - r.top - thumbH / 2) / (trackH - thumbH));
+    jumpTo((e.clientY - r.top - thumbH / 2) / Math.max(1, trackH - thumbH));
   };
 
   // ── keyboard ──

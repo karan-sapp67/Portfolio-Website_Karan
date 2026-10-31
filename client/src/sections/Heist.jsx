@@ -72,7 +72,7 @@ export default function Heist({ onSkip }) {
   const shards = useMemo(() => fanShards(lite ? 8 : 14, 9), [lite]);
 
   useLayoutEffect(() => {
-    if (reduced) return;
+    if (reduced || !root.current) return;
     let offMove;
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector(root);
@@ -150,7 +150,7 @@ export default function Heist({ onSkip }) {
       tl.fromTo(q('.release'), { x: 0, xPercent: -130, skewX: -14, autoAlpha: 1 }, { xPercent: 0, autoAlpha: 1, duration: 8, ease: 'power2.inOut' }, 92);
 
       // gentle mouse parallax: portrait max 8px + 3deg tilt, tiles and stickers a little more
-      if (matchMedia('(pointer: fine)').matches) {
+      if (matchMedia('(pointer: fine)').matches && q('.portrait-px')[0]) {
         const px = q('.portrait-px')[0];
         gsap.set(px, { transformPerspective: 900 });
         const pX = gsap.quickTo(px, 'x', { duration: 0.6, ease: 'power3' });
